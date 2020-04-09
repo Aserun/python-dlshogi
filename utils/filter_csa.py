@@ -20,15 +20,19 @@ for filepath in find_all_files(args.dir):
     rate = {}
     move_len = 0
     toryo = False
-    for line in open(filepath, 'r', encoding='utf-8'):
-        line = line.strip()
-        m = ptn_rate.match(line)
-        if m:
-            rate[m.group(1)] = float(m.group(2))
-        if line[:1] == '+' or line[:1] == '-':
-            move_len += 1
-        if line == '%TORYO':
-            toryo = True
+    try:
+        for line in open(filepath, 'r', encoding='utf-8'):
+            line = line.strip()
+            m = ptn_rate.match(line)
+            if m:
+                rate[m.group(1)] = float(m.group(2))
+            if line[:1] == '+' or line[:1] == '-':
+                move_len += 1
+            if line == '%TORYO':
+                toryo = True
+    except:
+        os.remove(filepath)
+        continue
     if not toryo or move_len <= 50 or len(rate) < 2 or min(rate.values()) < 2500:
         os.remove(filepath)
     else:

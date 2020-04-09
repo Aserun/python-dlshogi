@@ -10,7 +10,11 @@ def read_kifu(kifu_list_file):
     with open(kifu_list_file, 'r') as f:
         for line in f.readlines():
             filepath = line.rstrip('\r\n')
-            kifu = shogi.CSA.Parser.parse_file(filepath)[0]
+            try:
+                kifu = shogi.CSA.Parser.parse_file(filepath)[0]
+            except:
+                print(filepath)
+                continue
             win_color = shogi.BLACK if kifu['win'] == 'b' else shogi.WHITE
             board = shogi.Board()
             for move in kifu['moves']:
